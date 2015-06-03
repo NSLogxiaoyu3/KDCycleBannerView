@@ -7,12 +7,13 @@
 //
 
 #import "KDCycleBannerView.h"
+#import "CustomScrollView.h"
 
 #import <SDWebImage/UIImageView+WebCache.h>
 
-@interface KDCycleBannerView () <UIScrollViewDelegate, UIGestureRecognizerDelegate>
+@interface KDCycleBannerView () <UIScrollViewDelegate>
 
-@property (strong, nonatomic) UIScrollView *scrollView;
+@property (strong, nonatomic) CustomScrollView *scrollView;
 @property (assign, nonatomic) BOOL scrollViewBounces;
 
 @property (strong, nonatomic) UIPageControl *pageControl;
@@ -79,7 +80,7 @@ static void *kContentImageViewObservationContext = &kContentImageViewObservation
 }
 
 - (void)initializeScrollView {
-    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))];
+    _scrollView = [[CustomScrollView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))];
     _scrollView.delegate = self;
     _scrollView.pagingEnabled = YES;
     _scrollView.showsHorizontalScrollIndicator = NO;
@@ -161,13 +162,6 @@ static void *kContentImageViewObservationContext = &kContentImageViewObservation
     if (self.isContinuous && _datasourceImages.count > 1) {
         _scrollView.contentOffset = CGPointMake(CGRectGetWidth(_scrollView.frame), 0);
     }
-    
-    // single tap gesture recognizer
-    UITapGestureRecognizer *tapGestureRecognize = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapGestureRecognizer:)];
-    tapGestureRecognize.delegate = self;
-    tapGestureRecognize.numberOfTapsRequired = 1;
-    [_scrollView addGestureRecognizer:tapGestureRecognize];
-    
 }
 
 - (void)reloadDataWithCompleteBlock:(CompleteBlock)competeBlock {
@@ -281,19 +275,6 @@ static void *kContentImageViewObservationContext = &kContentImageViewObservation
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     [self performSelector:@selector(autoSwitchBannerView) withObject:nil afterDelay:self.autoPlayTimeInterval];
-}
-
-#pragma mark - UIGestureRecognizerDelegate
-
-#pragma mark - UITapGestureRecognizerSelector
-
-- (void)singleTapGestureRecognizer:(UITapGestureRecognizer *)tapGesture {
-    
-    NSInteger page = (NSInteger)(_scrollView.contentOffset.x / CGRectGetWidth(_scrollView.frame));
-    
-    if ([self.delegate respondsToSelector:@selector(cycleBannerView:didSelectedAtIndex:)]) {
-        [self.delegate cycleBannerView:self didSelectedAtIndex:self.isContinuous ? --page : page];
-    }
 }
 
 @end
