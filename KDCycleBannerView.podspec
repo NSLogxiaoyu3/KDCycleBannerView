@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
 
 # Source Info
   s.ios.deployment_target = '6.0'
-  s.source       = { :git => 'https://github.com/kingiol/KDCycleBannerView.git', :tag => '1.1.1' }
+  s.source       = { :git => 'https://github.com/NSLogxiaoyu3/KDCycleBannerView.git', :tag => '1.1.1' }
   s.source_files = 'KDCycleBannerView/*{h,m}'
 
   s.requires_arc = true
