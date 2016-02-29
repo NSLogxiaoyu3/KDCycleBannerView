@@ -117,6 +117,10 @@ static void *kContentImageViewObservationContext = &kContentImageViewObservation
     _pageControl.numberOfPages = _datasourceImages.count;
     _pageControl.currentPage = 0;
     
+    if (_datasourceImages.count <= 1) {
+        _pageControl.hidden = YES;
+    }
+    
     if (self.isContinuous) {
         NSMutableArray *cycleDatasource = [_datasourceImages mutableCopy];
         [cycleDatasource insertObject:[_datasourceImages lastObject] atIndex:0];
